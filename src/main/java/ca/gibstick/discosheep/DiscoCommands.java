@@ -258,7 +258,10 @@ public class DiscoCommands {
             if (!plugin.hasParty(p.getName())) {
                 DiscoParty individualParty = party.clone(p);
                 individualParty.startDisco();
+                p.sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "==========================================");
                 p.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + sender.getName() + ChatColor.GREEN + ChatColor.BOLD + " started a disco sheep party!");
+                p.sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "=========================================");
+
             }
         }
     }

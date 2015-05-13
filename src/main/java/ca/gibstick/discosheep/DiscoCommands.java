@@ -4,12 +4,13 @@ import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.NestedCommand;
-import java.util.Arrays;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Arrays;
 
 /**
  *
@@ -257,7 +258,7 @@ public class DiscoCommands {
             if (!plugin.hasParty(p.getName())) {
                 DiscoParty individualParty = party.clone(p);
                 individualParty.startDisco();
-                p.sendMessage(ChatColor.RED + "LET'S DISCO!!");
+                p.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + sender.getName() + ChatColor.GREEN + ChatColor.BOLD + " started a disco sheep party!");
             }
         }
     }

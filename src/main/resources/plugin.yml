@@ -1,7 +1,7 @@
 name: DiscoSheep
 main: ca.gibstick.discosheep.DiscoSheep
 authors: [Gibstick, RangerMauve]
-version: 1.2
+version: 1.2-CAKE
 commands:
   #ds:
     #description: "Main DiscoSheep command"

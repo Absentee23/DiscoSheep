@@ -458,7 +458,7 @@ public class DiscoParty {
         if ((this.state + 1) % 8 == 0) {
             partyLocation.getWorld().playSound(partyLocation, Sound.NOTE_STICKS, volumeMultiplier * 1.0f, 1.0f);
         }
-
+        player.playSound(player.getLocation(), Sound.BURP, 0.5f, r.nextFloat() + 1);
     }
 
     void randomizeFirework(Firework firework) {

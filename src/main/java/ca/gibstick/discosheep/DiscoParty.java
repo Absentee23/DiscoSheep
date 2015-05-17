@@ -1,33 +1,19 @@
 package ca.gibstick.discosheep;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Random;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import static org.bukkit.EntityEffect.*;
-import org.bukkit.FireworkEffect;
+import org.bukkit.*;
 import org.bukkit.FireworkEffect.Builder;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Sheep;
+import org.bukkit.entity.*;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.*;
+
+import static org.bukkit.EntityEffect.SHEEP_EAT;
 
 public class DiscoParty {
 
@@ -327,9 +313,9 @@ public class DiscoParty {
         if (doLightning) {
             world.strikeLightningEffect(loc);
         }
-        //newSheep.setCustomName("jeb_");
-        //newSheep.setCustomNameVisible(false);
-        newSheep.setRemoveWhenFarAway(false);
+        newSheep.setCustomName("jeb_");
+        newSheep.setCustomNameVisible(false);
+        newSheep.setRemoveWhenFarAway(true);
     }
 
     void spawnGuest(World world, Location loc, EntityType type) {

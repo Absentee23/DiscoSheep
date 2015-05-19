@@ -559,7 +559,6 @@ public class DiscoParty {
         ApplicableRegionSet regions = ((WorldGuardPlugin) plugin).getRegionManager(loc.getWorld()).getApplicableRegions(loc);
 
         if (!regions.testState(null,DefaultFlag.MOB_SPAWNING)) {
-            plugin.getLogger().info("Mob-spawning denied, allowing...");
             for (ProtectedRegion r : regions) {
                 r.setFlag(DefaultFlag.MOB_SPAWNING, StateFlag.State.ALLOW);
             }

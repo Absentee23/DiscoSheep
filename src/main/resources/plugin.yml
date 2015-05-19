@@ -2,7 +2,7 @@ name: DiscoSheep
 main: ca.gibstick.discosheep.DiscoSheep
 authors: [Gibstick, RangerMauve]
 version: ${project.version}-b${build.number}
-softdepend: [worldguard]
+softdepend: [WorldGuard]
 commands:
   #ds:
     #description: "Main DiscoSheep command"

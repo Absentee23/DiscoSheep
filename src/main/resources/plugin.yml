@@ -1,7 +1,8 @@
 name: DiscoSheep
 main: ca.gibstick.discosheep.DiscoSheep
 authors: [Gibstick, RangerMauve]
-version: 1.2-CAKE
+version: ${project.version}-b${build.number}
+softdepend: [worldguard]
 commands:
   #ds:
     #description: "Main DiscoSheep command"

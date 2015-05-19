@@ -1,17 +1,8 @@
 package ca.gibstick.discosheep;
 
 import com.sk89q.bukkit.util.CommandsManagerRegistration;
-import com.sk89q.minecraft.util.commands.CommandPermissionsException;
-import com.sk89q.minecraft.util.commands.CommandUsageException;
-import com.sk89q.minecraft.util.commands.CommandsManager;
-import com.sk89q.minecraft.util.commands.MissingNestedCommandException;
-import com.sk89q.minecraft.util.commands.WrappedCommandException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.sk89q.minecraft.util.commands.*;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -20,11 +11,20 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class DiscoSheep extends JavaPlugin {
 
     private static DiscoSheep instance;
+    public boolean useWG = false;
 
     boolean partyOnJoin = true;
     Map<String, DiscoParty> parties = new HashMap<>();
@@ -81,6 +81,12 @@ public final class DiscoSheep extends JavaPlugin {
         instance = this;
         setupCommands();
         getServer().getPluginManager().registerEvents(new GlobalEvents(), this);
+
+        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
+        if ((plugin == null) && ((plugin instanceof WorldGuardPlugin)) && (plugin.isEnabled()) && ((plugin.getDescription().getVersion().startsWith("\"6")) || (plugin.getDescription().getVersion().startsWith("6")))) {
+            useWG = true;
+            this.getLogger().info("Using WorldGuard v6");
+        }
 
         getConfig().addDefault("on-join.enabled", partyOnJoin);
         getConfig().addDefault("max.sheep", DiscoParty.maxSheep);

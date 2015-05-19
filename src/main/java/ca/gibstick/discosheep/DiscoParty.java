@@ -1,5 +1,10 @@
 package ca.gibstick.discosheep;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.*;
 import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.block.Block;
@@ -8,6 +13,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.*;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -284,7 +290,16 @@ public class DiscoParty {
         double z = partyLocation.getZ();
         for (int i = 0; i < sheep; i++) {
             loc = getRandomSpawnLocation(x, z, world, spawnRadius);
-            spawnSheep(world, loc);
+            if (plugin.useWG) {
+                if (allowSpawn(loc)) {
+                    spawnSheep(world, loc);
+                    denySpawn(loc);
+                } else {
+                    spawnSheep(world, loc);
+                }
+            } else {
+                spawnSheep(world,loc);
+            }
         }
 
         // loop through hashmap of other guests and spawn accordingly
@@ -294,7 +309,16 @@ public class DiscoParty {
 
             for (int i = 0; i < num; i++) {
                 loc = getRandomSpawnLocation(x, z, world, spawnRadius);
-                spawnGuest(world, loc, ent);
+                if (plugin.useWG) {
+                    if (allowSpawn(loc)) {
+                        spawnGuest(world, loc, ent);
+                        denySpawn(loc);
+                    } else {
+                        spawnGuest(world, loc, ent);
+                    }
+                } else {
+                    spawnGuest(world,loc,ent);
+                }
             }
         }
 
@@ -305,7 +329,7 @@ public class DiscoParty {
 
     void spawnSheep(World world, Location loc) {
         Sheep newSheep = (Sheep) world.spawnEntity(loc, EntityType.SHEEP);
-        //newSheep.setColor(discoColours[(r.nextInt(discoColours.length))]);
+        newSheep.setColor(discoColours[(r.nextInt(discoColours.length))]);
         newSheep.setBreed(false);	// this prevents breeding - no event listener required
         newSheep.teleport(loc);	    // teleport is needed to set orientation
         getSheepList().add(newSheep);
@@ -313,14 +337,14 @@ public class DiscoParty {
         if (doLightning) {
             world.strikeLightningEffect(loc);
         }
-        newSheep.setCustomName("jeb_");
-        newSheep.setCustomNameVisible(false);
+        //newSheep.setCustomName("jeb_");
+        //newSheep.setCustomNameVisible(false);
         newSheep.setRemoveWhenFarAway(true);
     }
 
     void spawnGuest(World world, Location loc, EntityType type) {
         LivingEntity newGuest = (LivingEntity) loc.getWorld().spawnEntity(loc, type);
-        newGuest.setRemoveWhenFarAway(false);
+        newGuest.setRemoveWhenFarAway(true);
         getGuestList().add(newGuest);
         getGuestSet().add(newGuest);
         if (doLightning) {
@@ -402,7 +426,7 @@ public class DiscoParty {
 
     void updateAll() {
         for (Sheep sheeple : getSheepList()) {
-            //randomizeSheepColour(sheeple);
+            randomizeSheepColour(sheeple);
 
             if (state % 8 == 0) {
                 if (r.nextDouble() < 0.50 && doFireworks) {
@@ -528,6 +552,32 @@ public class DiscoParty {
         plugin.getPartyMap().remove(this.player.getName());
         // stop listening
         HandlerList.unregisterAll(this.partyEvents);
+    }
+
+    boolean allowSpawn(Location loc) {
+        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
+        ApplicableRegionSet regions = ((WorldGuardPlugin) plugin).getRegionManager(loc.getWorld()).getApplicableRegions(loc);
+
+        if (!regions.testState(null,DefaultFlag.MOB_SPAWNING)) {
+            plugin.getLogger().info("Mob-spawning denied, allowing...");
+            for (ProtectedRegion r : regions) {
+                r.setFlag(DefaultFlag.MOB_SPAWNING, StateFlag.State.ALLOW);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    void denySpawn(Location loc) {
+        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
+        ApplicableRegionSet regions = ((WorldGuardPlugin) plugin).getRegionManager(loc.getWorld()).getApplicableRegions(loc);
+
+        if (regions.testState(null,DefaultFlag.MOB_SPAWNING)) {
+            for (ProtectedRegion r : regions) {
+                r.setFlag(DefaultFlag.MOB_SPAWNING, StateFlag.State.DENY);
+            }
+        }
     }
 
     class DiscoUpdater extends BukkitRunnable {

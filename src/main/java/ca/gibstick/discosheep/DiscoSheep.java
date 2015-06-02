@@ -89,7 +89,7 @@ public final class DiscoSheep extends JavaPlugin {
                     this.getLogger().info("Using WorldGuard v6");
                 }
             }
-        } catch (NullPointerException e) {
+        } catch (NoClassDefFoundError e) {
             this.getLogger().info("WorldGuard not found!");
         }
 

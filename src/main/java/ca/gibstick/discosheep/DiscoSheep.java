@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -80,12 +81,16 @@ public final class DiscoSheep extends JavaPlugin {
         setupCommands();
         getServer().getPluginManager().registerEvents(new GlobalEvents(), this);
 
-        if (Bukkit.getServer().getPluginManager().getPlugin("WorldGuard") != null) {
-            /*Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
-            if (plugin.isEnabled() && ((plugin.getDescription().getVersion().startsWith("\"6")) || (plugin.getDescription().getVersion().startsWith("6")))) {
-                useWG = true;
-                this.getLogger().info("Using WorldGuard v6");
-            }*/
+        try {
+            if (Bukkit.getServer().getPluginManager().getPlugin("WorldGuard") != null) {
+                Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
+                if (plugin.isEnabled() && ((plugin.getDescription().getVersion().startsWith("\"6")) || (plugin.getDescription().getVersion().startsWith("6")))) {
+                    useWG = true;
+                    this.getLogger().info("Using WorldGuard v6");
+                }
+            }
+        } catch (NullPointerException e) {
+            this.getLogger().info("WorldGuard not found!");
         }
 
         getConfig().addDefault("on-join.enabled", partyOnJoin);

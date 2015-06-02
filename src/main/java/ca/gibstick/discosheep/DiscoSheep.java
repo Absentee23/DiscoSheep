@@ -82,10 +82,12 @@ public final class DiscoSheep extends JavaPlugin {
         setupCommands();
         getServer().getPluginManager().registerEvents(new GlobalEvents(), this);
 
-        Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
-        if (plugin != null && (plugin instanceof WorldGuardPlugin) && plugin.isEnabled() && ((plugin.getDescription().getVersion().startsWith("\"6")) || (plugin.getDescription().getVersion().startsWith("6")))) {
-            useWG = true;
-            this.getLogger().info("Using WorldGuard v6");
+        if (Bukkit.getServer().getPluginManager().getPlugin("WorldGuard") != null) {
+            Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
+            if (plugin != null && (plugin instanceof WorldGuardPlugin) && plugin.isEnabled() && ((plugin.getDescription().getVersion().startsWith("\"6")) || (plugin.getDescription().getVersion().startsWith("6")))) {
+                useWG = true;
+                this.getLogger().info("Using WorldGuard v6");
+            }
         }
 
         getConfig().addDefault("on-join.enabled", partyOnJoin);
